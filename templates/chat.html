@@ -97,7 +97,7 @@
 				</svg>
 			</button>
 			<div class="topbar-title">
-				MediAssist <span class="model-tag">Medical AI</span>
+				<img src="{{ url_for('static', filename='images/logo.png') }}" alt="MediAssist" style="width:28px;height:28px;object-fit:contain;vertical-align:middle;margin-right:6px;">MediAssist <span class="model-tag">Medical AI</span>
 			</div>
 			<div class="topbar-right">
 				{% if user and (not user.age or not user.gender) %}
@@ -440,7 +440,7 @@
 
 		$('#messageFormeight').append(`
 		<div class="msg bot-msg fade-in">
-			<div class="bot-avatar-wrap"><div class="bot-av">M</div></div>
+			<div class="bot-avatar-wrap"><div class="bot-av"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="M" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"></div></div>
 			<div class="msg-body">
 				<p>Hello, <strong>${esc(userName)}</strong>! I'm <strong>MediAssist</strong> 👋 — your AI-powered medical assistant.</p>
 				<p>${profileNote}</p>
@@ -576,9 +576,9 @@
 					var rawAnalysis = botContent.substring(botContent.indexOf('\n') + 1);
 					if (rawAnalysis === botContent) rawAnalysis = botContent.replace('[PRESCRIPTION_ANALYSIS]', '');
 					var analysisHtml = marked.parse(rawAnalysis);
-					feed.append('<div class="msg bot-msg fade-in"><div class="bot-avatar-wrap"><div class="bot-av">M</div></div><div class="msg-content-wrap"><div class="msg-body"><div class="rx-card"><div class="rx-card-header"><i class="fas fa-prescription-bottle-alt"></i><span>Prescription Analysis</span></div><div class="rx-card-body" id="' + msgId + '">' + analysisHtml + '</div><div class="rx-card-footer"><i class="fas fa-exclamation-triangle" style="margin-top:2px;flex-shrink:0"></i> For informational purposes only. Always consult your doctor or pharmacist.</div></div></div><div class="msg-actions"><button class="msg-action-btn" onclick="copyResponse(\x27' + msgId + '\x27)" title="Copy response"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button><button class="msg-action-btn" onclick="readAloud(\x27' + msgId + '\x27)" title="Read aloud"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><span>Read aloud</span></button></div></div></div>');
+					feed.append('<div class="msg bot-msg fade-in"><div class="bot-avatar-wrap"><div class="bot-av"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="M" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"></div></div><div class="msg-content-wrap"><div class="msg-body"><div class="rx-card"><div class="rx-card-header"><i class="fas fa-prescription-bottle-alt"></i><span>Prescription Analysis</span></div><div class="rx-card-body" id="' + msgId + '">' + analysisHtml + '</div><div class="rx-card-footer"><i class="fas fa-exclamation-triangle" style="margin-top:2px;flex-shrink:0"></i> For informational purposes only. Always consult your doctor or pharmacist.</div></div></div><div class="msg-actions"><button class="msg-action-btn" onclick="copyResponse(\x27' + msgId + '\x27)" title="Copy response"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button><button class="msg-action-btn" onclick="readAloud(\x27' + msgId + '\x27)" title="Read aloud"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><span>Read aloud</span></button></div></div></div>');
 				} else {
-					feed.append('<div class="msg bot-msg fade-in"><div class="bot-avatar-wrap"><div class="bot-av">M</div></div><div class="msg-content-wrap"><div class="msg-body msg_markdown" id="' + msgId + '">' + marked.parse(botContent) + '</div><div class="msg-actions"><button class="msg-action-btn" onclick="copyResponse(\x27' + msgId + '\x27)" title="Copy response"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button><button class="msg-action-btn" onclick="readAloud(\x27' + msgId + '\x27)" title="Read aloud"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><span>Read aloud</span></button></div></div></div>');
+					feed.append('<div class="msg bot-msg fade-in"><div class="bot-avatar-wrap"><div class="bot-av"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="M" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"></div></div><div class="msg-content-wrap"><div class="msg-body msg_markdown" id="' + msgId + '">' + marked.parse(botContent) + '</div><div class="msg-actions"><button class="msg-action-btn" onclick="copyResponse(\x27' + msgId + '\x27)" title="Copy response"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button><button class="msg-action-btn" onclick="readAloud(\x27' + msgId + '\x27)" title="Read aloud"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><span>Read aloud</span></button></div></div></div>');
 				}
 			}
 		});
@@ -620,7 +620,7 @@
 
 			$('#messageFormeight').append(`
 	<div class="msg bot-msg fade-in" id="typing-indicator">
-		<div class="bot-avatar-wrap"><div class="bot-av">M</div></div>
+		<div class="bot-avatar-wrap"><div class="bot-av"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="M" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"></div></div>
 		<div class="msg-body"><div class="typing-dots"><span></span><span></span><span></span></div></div>
 	</div>`);
 			scrollToBottom();
@@ -632,7 +632,7 @@
 					var msgId = 'bot-msg-' + Date.now();
 					$('#messageFormeight').append(`
 		<div class="msg bot-msg fade-in">
-			<div class="bot-avatar-wrap"><div class="bot-av">M</div></div>
+			<div class="bot-avatar-wrap"><div class="bot-av"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="M" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"></div></div>
 			<div class="msg-content-wrap">
 				<div class="msg-body msg_markdown" id="${msgId}">${marked.parse(data)}</div>
 				<div class="msg-actions">
@@ -666,7 +666,7 @@
 					$('#typing-indicator').remove();
 					$('#messageFormeight').append(`
 		<div class="msg bot-msg fade-in">
-			<div class="bot-avatar-wrap"><div class="bot-av">M</div></div>
+			<div class="bot-avatar-wrap"><div class="bot-av"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="M" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"></div></div>
 			<div class="msg-body err-txt">Something went wrong. Please try again.</div>
 		</div>`);
 					scrollToBottom();
@@ -1098,7 +1098,7 @@
 			// Show analyzing spinner
 			$('#messageFormeight').append(`
 			<div class="msg bot-msg fade-in" id="rx-analyzing-indicator">
-				<div class="bot-avatar-wrap"><div class="bot-av">M</div></div>
+				<div class="bot-avatar-wrap"><div class="bot-av"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="M" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"></div></div>
 				<div class="msg-body">
 					<div class="rx-analyzing">
 						<div class="rx-spinner"></div>
@@ -1124,13 +1124,13 @@
 					if (response.error) {
 						$('#messageFormeight').append(`
 						<div class="msg bot-msg fade-in">
-							<div class="bot-avatar-wrap"><div class="bot-av">M</div></div>
+							<div class="bot-avatar-wrap"><div class="bot-av"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="M" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"></div></div>
 							<div class="msg-body"><div class="rx-error"><i class="fas fa-exclamation-circle"></i> ${esc(response.error)}</div></div>
 						</div>`);
 					} else {
 						$('#messageFormeight').append(`
 						<div class="msg bot-msg fade-in">
-							<div class="bot-avatar-wrap"><div class="bot-av">M</div></div>
+							<div class="bot-avatar-wrap"><div class="bot-av"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="M" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"></div></div>
 							<div class="msg-body">
 								<div class="rx-card">
 									<div class="rx-card-header">
@@ -1154,7 +1154,7 @@
 					try { var j = JSON.parse(xhr.responseText); if (j.error) msg = j.error; } catch (e) { }
 					$('#messageFormeight').append(`
 					<div class="msg bot-msg fade-in">
-						<div class="bot-avatar-wrap"><div class="bot-av">M</div></div>
+						<div class="bot-avatar-wrap"><div class="bot-av"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="M" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"></div></div>
 						<div class="msg-body"><div class="rx-error"><i class="fas fa-exclamation-circle"></i> ${esc(msg)}</div></div>
 					</div>`);
 					scrollToBottom();

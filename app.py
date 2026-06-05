@@ -178,7 +178,7 @@ def register():
 @app.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("login"))
+    return redirect(url_for("landing"))
 
 
 # ─────────────────────────── Google OAuth Routes ─────────────────────────────
@@ -218,6 +218,14 @@ def google_callback():
 
 
 @app.route("/")
+def landing():
+    """Public landing page — visible to everyone."""
+    if "user_id" in session:
+        return redirect(url_for("index"))
+    return render_template("landing.html")
+
+
+@app.route("/chat")
 @login_required
 def index():
     user = user_db.get_user_by_id(session["user_id"])
