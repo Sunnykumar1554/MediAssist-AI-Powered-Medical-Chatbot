@@ -1,26 +1,31 @@
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from sentence_transformers import SentenceTransformer
 from typing import List
 from langchain.schema import Document
 import csv
 import os
+import requests
 
 
-# custom lightweight wrapper to mimic the LangChain embeddings interface
-class _SimpleHuggingFaceEmbeddings:
-    def __init__(self, model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
-        # load the model once; SentenceTransformer returns numpy arrays
-        self._model = SentenceTransformer(model_name)
+# Lightweight embedding wrapper using HuggingFace Inference API (free)
+# Uses the SAME model (all-MiniLM-L6-v2) but via API instead of loading locally
+# This saves ~400MB RAM (no PyTorch/sentence-transformers needed)
+class _HuggingFaceAPIEmbeddings:
+    API_URL = "https://api-inference.huggingface.co/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2"
+
+    def __init__(self):
+        self._token = os.environ.get("HF_API_TOKEN", "")
+        self._headers = {"Authorization": f"Bearer {self._token}"} if self._token else {}
 
     def embed_documents(self, texts: List[str]) -> List[list[float]]:
-        # PineconeVectorStore and other LangChain utilities expect a list
-        # of embedding vectors for a list of input strings.
-        return self._model.encode(texts).tolist()
+        response = requests.post(self.API_URL, headers=self._headers, json={"inputs": texts, "options": {"wait_for_model": True}})
+        response.raise_for_status()
+        return response.json()
 
     def embed_query(self, text: str) -> list[float]:
-        # embed a single query string
-        return self._model.encode([text])[0].tolist()
+        response = requests.post(self.API_URL, headers=self._headers, json={"inputs": text, "options": {"wait_for_model": True}})
+        response.raise_for_status()
+        return response.json()
 
 
 #Extract Data From the PDF File
@@ -65,10 +70,10 @@ def text_split(extracted_data):
 def download_hugging_face_embeddings():
     """Return an embedding object compatible with LangChain.
 
-    We purposely avoid the external ``langchain-huggingface`` package to
-    keep dependencies simple and prevent version mismatches.
+    Uses HuggingFace Inference API instead of loading model locally
+    to save ~400MB RAM (fits within Render free tier).
     """
-    return _SimpleHuggingFaceEmbeddings()
+    return _HuggingFaceAPIEmbeddings()
 
 
 def load_csv_file(csv_path: str, deduplicate: bool = True) -> List[Document]:
