@@ -6,7 +6,9 @@ python-dotenv==1.1.0
 langchain-pinecone==0.2.8
 langchain-openai==0.3.24
 langchain-community==0.3.26
+langchain-groq>=0.3.0,<1.0.0
 openai>=1.109.0
 pinecone>=8.0.0
 authlib>=1.7.0
+gunicorn>=23.0.0
 -e .

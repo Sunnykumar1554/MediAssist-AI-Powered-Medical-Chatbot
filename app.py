@@ -3,7 +3,7 @@ from functools import wraps
 from src.helper import download_hugging_face_embeddings
 from user_db import UserDB
 from langchain_pinecone import PineconeVectorStore
-from langchain_community.chat_models import ChatOllama
+from langchain_groq import ChatGroq
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
@@ -31,11 +31,9 @@ load_dotenv()
 
 PINECONE_API_KEY  = os.environ.get("PINECONE_API_KEY")
 NVIDIA_API_KEY    = os.environ.get("NVIDIA_API_KEY", "")
-LLAMA_MODEL       = os.environ.get("LLAMA_MODEL", "llama3")
-OLLAMA_BASE_URL   = os.environ.get("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+GROQ_API_KEY      = os.environ.get("GROQ_API_KEY", "")
 
 os.environ["PINECONE_API_KEY"] = PINECONE_API_KEY
-os.environ["LLAMA_MODEL"]      = LLAMA_MODEL
 
 # ── Embeddings & Vector Store (medical knowledge — untouched namespace) ──────
 embeddings = download_hugging_face_embeddings()
@@ -58,10 +56,10 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-chatModel = ChatOllama(
-    model=LLAMA_MODEL,
-    base_url=OLLAMA_BASE_URL,
-    temperature=float(os.environ.get("LLAMA_TEMPERATURE", "0.1")),
+chatModel = ChatGroq(
+    model="llama-3.1-8b-instant",
+    api_key=GROQ_API_KEY,
+    temperature=0.1,
 )
 
 question_answer_chain = create_stuff_documents_chain(chatModel, prompt)
@@ -186,7 +184,7 @@ def logout():
 @app.route("/auth/google")
 def google_login():
     """Redirect user to Google consent screen."""
-    redirect_uri = "http://localhost:5000/auth/google/callback"
+    redirect_uri = url_for("google_callback", _external=True)
     return google.authorize_redirect(redirect_uri)
 
 
