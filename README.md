@@ -1,6 +1,8 @@
 # 🏥 MediAssist — AI-Powered Medical Chatbot
 
-An intelligent medical chatbot built with **LangChain**, **Pinecone**, **Ollama (Llama 3.2)**, and **Flask**. It provides symptom-based medical guidance, prescription image analysis (OCR), and persistent chat history — all wrapped in a sleek, modern UI.
+🚀 **Live Demo:** [https://mediassist-ai-powered-medical-chatbot.onrender.com](https://mediassist-ai-powered-medical-chatbot.onrender.com)
+
+An intelligent medical chatbot built with **LangChain**, **Pinecone**, **Groq (Llama 3.1)**, and **Flask**. It provides symptom-based medical guidance, prescription image analysis (OCR), and persistent chat history — all wrapped in a sleek, modern UI.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)
 ![Flask](https://img.shields.io/badge/Flask-3.1-lightgrey?logo=flask)
@@ -160,10 +162,10 @@ Medical-Chatbot/
 |-------|-----------|
 | **Frontend** | HTML, CSS, JavaScript, jQuery, Marked.js |
 | **Backend** | Flask (Python) |
-| **LLM (Chat)** | Ollama + Llama 3.2 (1B) — runs locally |
+| **LLM (Chat)** | Groq + Llama 3.1 (8B) — cloud-hosted |
 | **LLM (OCR)** | NVIDIA Nemotron VL 8B via NIM API |
 | **Vector DB** | Pinecone (medical knowledge + user data + chat history) |
-| **Embeddings** | Sentence-Transformers (all-MiniLM-L6-v2, 384-dim) |
+| **Embeddings** | HuggingFace Inference API (all-MiniLM-L6-v2, 384-dim) |
 | **RAG Framework** | LangChain (retrieval chain + MMR search) |
 | **Auth** | Flask sessions + Google OAuth 2.0 (Authlib) |
 | **Voice** | Web Speech API (STT + TTS) |
