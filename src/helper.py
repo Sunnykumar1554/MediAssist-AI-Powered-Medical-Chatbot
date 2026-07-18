@@ -7,25 +7,8 @@ import os
 import requests
 
 
-# Lightweight embedding wrapper using HuggingFace Inference API (free)
-# Uses the SAME model (all-MiniLM-L6-v2) but via API instead of loading locally
-# This saves ~400MB RAM (no PyTorch/sentence-transformers needed)
-class _HuggingFaceAPIEmbeddings:
-    API_URL = "https://api-inference.huggingface.co/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2"
-
-    def __init__(self):
-        self._token = os.environ.get("HF_API_TOKEN", "")
-        self._headers = {"Authorization": f"Bearer {self._token}"} if self._token else {}
-
-    def embed_documents(self, texts: List[str]) -> List[list[float]]:
-        response = requests.post(self.API_URL, headers=self._headers, json={"inputs": texts, "options": {"wait_for_model": True}})
-        response.raise_for_status()
-        return response.json()
-
-    def embed_query(self, text: str) -> list[float]:
-        response = requests.post(self.API_URL, headers=self._headers, json={"inputs": text, "options": {"wait_for_model": True}})
-        response.raise_for_status()
-        return response.json()
+# Use local sentence-transformers model for embeddings.
+# Loads the same all-MiniLM-L6-v2 model locally — no external API dependency.
 
 
 #Extract Data From the PDF File
@@ -70,10 +53,11 @@ def text_split(extracted_data):
 def download_hugging_face_embeddings():
     """Return an embedding object compatible with LangChain.
 
-    Uses HuggingFace Inference API instead of loading model locally
-    to save ~400MB RAM (fits within Render free tier).
+    Uses local sentence-transformers model (all-MiniLM-L6-v2, 384 dims).
+    No external API dependency — works offline.
     """
-    return _HuggingFaceAPIEmbeddings()
+    from langchain_community.embeddings import HuggingFaceEmbeddings
+    return HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
 
 def load_csv_file(csv_path: str, deduplicate: bool = True) -> List[Document]:

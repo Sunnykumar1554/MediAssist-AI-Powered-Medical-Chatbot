@@ -258,20 +258,24 @@ def chat():
     if not msg:
         return "Please enter a message.", 400
 
-    user       = user_db.get_user_by_id(session["user_id"])
-    prefix     = _user_context_prefix(user) if user else ""
-    full_input = prefix + msg
+    try:
+        user       = user_db.get_user_by_id(session["user_id"])
+        prefix     = _user_context_prefix(user) if user else ""
+        full_input = prefix + msg
 
-    print(f"[{session.get('username')}] {full_input}")
-    response = rag_chain.invoke({"input": full_input})
-    answer   = response["answer"]
-    print("Response:", answer)
+        print(f"[{session.get('username')}] {full_input}")
+        response = rag_chain.invoke({"input": full_input})
+        answer   = response["answer"]
+        print("Response:", answer)
 
-    # Persist conversation
-    user_db.save_message(session["user_id"], role="user", content=msg)
-    user_db.save_message(session["user_id"], role="bot",  content=answer)
+        # Persist conversation
+        user_db.save_message(session["user_id"], role="user", content=msg)
+        user_db.save_message(session["user_id"], role="bot",  content=answer)
 
-    return str(answer)
+        return str(answer)
+    except Exception as e:
+        print(f"[CHAT ERROR] {type(e).__name__}: {e}")
+        return f"Error: {e}", 500
 
 
 @app.route("/delete_conversation", methods=["POST"])

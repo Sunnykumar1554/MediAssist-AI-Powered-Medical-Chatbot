@@ -106,7 +106,7 @@
 					<i class="fas fa-exclamation-circle" style="font-size:11px"></i> Complete Profile
 				</button>
 				{% endif %}
-				<button class="icon-btn tts-btn" id="ttsToggle" title="Mute bot voice">
+				<button class="icon-btn tts-btn tts-off" id="ttsToggle" title="Unmute bot voice">
 					<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
 						stroke-linecap="round" stroke-linejoin="round">
 						<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
@@ -660,7 +660,7 @@
 			</div>
 		</div>`);
 					scrollToBottom();
-					speakText(data);   // 🔊 bot speaks the response
+					// speakText removed — only speaks when user clicks "Read aloud"
 				})
 				.fail(function () {
 					$('#typing-indicator').remove();
@@ -768,7 +768,7 @@
 		var synthesis = window.speechSynthesis;
 		var isListening = false;
 		var voiceFinalTxt = '';
-		var ttsEnabled = true;   // bot speaks responses aloud
+		var ttsEnabled = false;  // off by default — user clicks toggle or "Read aloud"
 
 		/* ── Browser support check ── */
 		var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
