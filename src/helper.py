@@ -7,8 +7,25 @@ import os
 import requests
 
 
-# Use local sentence-transformers model for embeddings.
-# Loads the same all-MiniLM-L6-v2 model locally — no external API dependency.
+# Lightweight embedding wrapper using HuggingFace Inference API
+# Falls back to local model if API is unreachable
+class _HuggingFaceAPIEmbeddings:
+    API_URL = "https://api-inference.huggingface.co/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2"
+
+    def __init__(self):
+        self._token = os.environ.get("HF_API_TOKEN", "")
+        self._headers = {"Authorization": f"Bearer {self._token}"} if self._token else {}
+
+    def embed_documents(self, texts: List[str]) -> List[list[float]]:
+        response = requests.post(self.API_URL, headers=self._headers, json={"inputs": texts, "options": {"wait_for_model": True}})
+        response.raise_for_status()
+        return response.json()
+
+    def embed_query(self, text: str) -> list[float]:
+        response = requests.post(self.API_URL, headers=self._headers, json={"inputs": text, "options": {"wait_for_model": True}})
+        response.raise_for_status()
+        return response.json()
+
 
 
 #Extract Data From the PDF File
@@ -49,15 +66,28 @@ def text_split(extracted_data):
 
 
 
-
 def download_hugging_face_embeddings():
     """Return an embedding object compatible with LangChain.
 
-    Uses local sentence-transformers model (all-MiniLM-L6-v2, 384 dims).
-    No external API dependency — works offline.
+    Strategy: try HuggingFace Inference API first (lightweight, no torch needed).
+    If the API is unreachable (e.g. DNS blocked), fall back to local model.
     """
-    from langchain_community.embeddings import HuggingFaceEmbeddings
-    return HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    # Quick connectivity check — try the API first
+    try:
+        test = requests.post(
+            _HuggingFaceAPIEmbeddings.API_URL,
+            headers={"Authorization": f"Bearer {os.environ.get('HF_API_TOKEN', '')}"}
+                    if os.environ.get("HF_API_TOKEN") else {},
+            json={"inputs": "test", "options": {"wait_for_model": True}},
+            timeout=10,
+        )
+        test.raise_for_status()
+        print("[Embeddings] Using HuggingFace Inference API")
+        return _HuggingFaceAPIEmbeddings()
+    except Exception as e:
+        print(f"[Embeddings] API unreachable ({e.__class__.__name__}), falling back to local model")
+        from langchain_community.embeddings import HuggingFaceEmbeddings
+        return HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
 
 def load_csv_file(csv_path: str, deduplicate: bool = True) -> List[Document]:
