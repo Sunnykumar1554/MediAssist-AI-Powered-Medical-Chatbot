@@ -69,25 +69,18 @@ def text_split(extracted_data):
 def download_hugging_face_embeddings():
     """Return an embedding object compatible with LangChain.
 
-    Strategy: try HuggingFace Inference API first (lightweight, no torch needed).
-    If the API is unreachable (e.g. DNS blocked), fall back to local model.
+    Strategy: Use local model if sentence-transformers is installed (local dev).
+    Otherwise, fall back to HuggingFace Inference API (Render deployment).
     """
-    # Quick connectivity check — try the API first
     try:
-        test = requests.post(
-            _HuggingFaceAPIEmbeddings.API_URL,
-            headers={"Authorization": f"Bearer {os.environ.get('HF_API_TOKEN', '')}"}
-                    if os.environ.get("HF_API_TOKEN") else {},
-            json={"inputs": "test", "options": {"wait_for_model": True}},
-            timeout=10,
-        )
-        test.raise_for_status()
-        print("[Embeddings] Using HuggingFace Inference API")
-        return _HuggingFaceAPIEmbeddings()
-    except Exception as e:
-        print(f"[Embeddings] API unreachable ({e.__class__.__name__}), falling back to local model")
+        # Check if sentence-transformers is installed
+        import sentence_transformers
         from langchain_community.embeddings import HuggingFaceEmbeddings
+        print("[Embeddings] sentence-transformers package detected. Using local model.")
         return HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    except ImportError:
+        print("[Embeddings] sentence-transformers package not found. Using HuggingFace Inference API.")
+        return _HuggingFaceAPIEmbeddings()
 
 
 def load_csv_file(csv_path: str, deduplicate: bool = True) -> List[Document]:
